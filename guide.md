@@ -60,6 +60,20 @@
 - 이외에도 에러 경우의 수가 매우 많기 때문에 정확한 에러메시지 직접 검색이 답이다! 
 
 <br />
+<br />
+
+> 만약 프로젝트 설치가 너무 오래걸린다면 yarn을 이용 
+- 구글에 yarn 1.22 이거 검색하시면 설치사이트가 하나 나오는데, 거기서 1.22 이상의 버전을 install한다            
+~~(cf. 2021년 기준: 2.X 버전은 아직 불안정해서 1.X 버전으로 설치하는걸 추천)~~     
+[다운로드시 참고!](https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable)        
+[에러 발생시 참고!](https://letscodepare.com/blog/npm-resolving-eacces-permissions-denied)        
+- `yarn`이란 npm이나 npx를 대체해서 이용할 수 있게 도와주는 아이
+  - npm보다 훨씬 빠른 라이브러리 설치 속도와 안정성을 자랑한다 
+  - 일단 설치하면 npx create-react-app 명령어를 사용할 때 자동으로 yarn이 구동되어 빨라진다.        
+  - 다른 라이브러리를 설치할 때도 "npm install [라이브버리명]" 대신 "yarn add [라이브버리명]" 명령어를 사용하면 더 빠르게 설치할 수 있고, 리액트 개발 서버를 띄우려고 "npm run start"도 "yarn start"로 대체할 수 있다
+  - ~~(cf. 맥유저 - 만약 "권한이 없어요" 에러가 뜬다면 _sudo_ 라는 단어를 앞에 붙여서 해볼 것!)~~     
+
+<br />
 <hr />
 <br />
 
@@ -175,7 +189,7 @@
   - 사용 예시:      
     - e.g.      
     ```js
-      import React, { useLayoutEffect, useState } from "react";
+      import React, { useState } from "react";
 
       function App() {
         const [title, setTitle] = useState(["남자 코트 추천", "여자 코트 추천", "직장인 데일리 코디"]);
@@ -203,7 +217,334 @@
 <hr />
 <br />
 
-## 유용한 문법: React Component 
+## 유용한 문법: React Component - e.g. 많은 div들을 한 단어로 줄이고 싶은 충동이 들 때 
+- HTML의 div 지옥이 생겨났을 때 사용가능한, HTML을 줄여서 쓸 수 있는 리액트 문법이 있다. 
+  - 리액트의 Component 문법 
+  - 사용 예시     
+    - e.g.       
+    ```js 
+      import React, { useState } from "react";
+      import "../src/App.css";
+
+      function App() {     
+        const [title, setTitle] = useState(["남자 코트 추천", "여자 코트 추천", "ㄱ 직장인 데일리 코디"]);
+        const [like, setLike] = useState(0);
+
+        const onClickLike = () => {
+          setLike(like + 1);
+        };
+
+        const onClickTitle = () => {
+          const newArrDeepCopied = [...title]; 
+          setTitle(newArrDeepCopied);
+        };
+
+        const onClickSort =() => {
+          const newArr = [...title].sort();   // 딥카피!! 필수!!
+          setTitle(newArr);
+        };
+
+        return (
+          <div className="App">
+            <div className="black-nav">
+              <div>개발 Blog</div>
+            </div>
+
+            <button onClick={onClickTitle}>버튼</button>
+            <button onClick={onClickSort}>정렬</button>
+
+            <div className="list">
+              <h3>{ title[0] } <span onClick={onClickLike}>👍</span> {like} </h3>
+              <p>2월 17일 발행</p>
+              <hr />
+            </div>
+
+
+            {/* 아래 둘다 가능 ~ */}
+            <Modal></Modal>
+            <Modal />
+
+          </div> 
+        );
+
+        // Component 
+        function Modal() {
+          return (
+            <div className="modal">
+              <h2>제목</h2>
+              <p>날짜</p>
+              <p>상세내용</p>
+            </div>
+          );
+        }
+
+      }
+
+      export default App;
+    ```
+- 관습적으로 리액트에서 컴포넌트를 만들때 **대문자**로 시작한다.
+
+
+<br />
+<hr />
+<br />
+
+## 유용한 문법: fragments 
+- 리액트에서 `return ();` 안에는 들어가는 tag가 여러개라면 두 개 이상의 태그는 꼭 하나의 태그로 감싸져있어야 한다.    
+그렇지만 여러개의 태그를 감싸는 역할로 불필요한 태그를 또 생성하는게 별로일 때가 있을 것이다.    
+그때 사용할 수 있는 것이 바로 빈태그인 리액트의 "fragment 태그"이다.     
+- 리액트에서 fragment 태그는 실제로는 아무런 역할도 하지 않는다.      
+다만 여러 elements 들을 **묶어주는 것만 할 뿐**이다.
+  - e.g.     
+    ```js 
+      // 아래와 같이 불필요한 div를 하나 더 만들어서...  
+      <div>
+        <Hello />
+        <div>안녕히계세요</div>
+      </div>
+
+      // 또는 ... 불필요한 div를 넣어주기 싫으면 fragment를 사용해서... 
+      <>
+        <Hello />
+        <div>안녕히계세요</div>
+      </>
+    ```
+- [TIL 참고](https://github.com/ekfka4863/TIL/blob/master/React/React%20Basic/React_JSX.md)!
+
+
+<br />
+<hr />
+<br />
+
+## 유용한 문법: 자바스크립트에서 특정 조건에서만 컴포넌트 보여주기 
+- `{}`안에 자바스크립트 넣어주는 것이 원칙
+- 이때, 조건을 넣어주고 싶으니까 if else 문을 사용해야 한다고 생각할 수 있는데,      
+우리는 중괄호 `{}`안에 if 대신 "삼항연산자"라는 자바스크립트 조건문을 넣어줄 것이다.      
+  - e.g.     
+    ```js
+      // 기본 문법 -> { (조건) ? (조건이 참일 때 실행할 코드) : (조건이 거짓일 때 실행할 코드) }
+
+      {
+        1 < 3 ? console.log("맞아요") : console.log("틀려요") 
+      }
+    ```
+  - e.g. 응용          
+    ```js
+      import React, { useState } from "react";
+      import "../src/App.css";
+
+      function App() {
+        const [title, setTitle] = useState(["남자 코트 추천", "여자 코트 추천", "ㄱ 직장인 데일리 코디"]);
+        const [like, setLike] = useState(0);
+        const [modal, setModal] = useState(false); 
+
+        const onClickLike = () => {
+          setLike(like + 1);
+        };
+
+        const onClickTitle = () => {
+          const newArrDeepCopied = [...title]; 
+          setTitle(newArrDeepCopied);
+        };
+
+        const onClickSort =() => {
+          const newArr = [...title].sort();   // 딥카피!! 필수!!
+          setTitle(newArr);
+        };
+
+        const onClickModal =() => {
+          setModal(!modal);
+        };
+
+        return (
+          <div className="App">
+            <div className="black-nav">
+              <div>개발 Blog</div>
+            </div>
+
+            <button onClick={onClickTitle}>버튼</button>
+            <button onClick={onClickSort}>정렬</button>
+
+            <div className="list">
+              <h3>{ title[0] } <span onClick={onClickLike}>👍</span> {like} </h3>
+              <p>2월 17일 발행</p>
+              <hr />
+            </div>
+            <div className="list">
+              <h3>{ title[1] }</h3>
+              <p>2월 17일 발행</p>
+              <hr />
+            </div>
+            <div className="list">
+              <h3 onClick={onClickModal}>{ title[2] }</h3>
+              <p>2월 17일 발행</p>
+              <hr />
+            </div>
+
+            {modal ? <Modal /> : null}
+            {/* 위에서 null은 텅빈 HTML 이라는 의미 */}
+            
+
+          </div> 
+        );
+
+        // 아래와 같은 Component가 있을 떄  
+        function Modal() {
+          return (
+            <div className="modal">
+              <h2>제목</h2>
+              <p>날짜</p>
+              <p>상세내용</p>
+            </div>
+          );
+        }
+
+      }
+
+      export default App;
+    ``` 
+
+
+<br />
+<hr />
+<br />
+
+## 유용한 문법: map - 많은 태그들을 반복문으로 한번에 만들고 싶을 때  
+- 다만, JSX에서는 js를 사용하려면 중괄호 {} 안에서 사용해야 하는데, JSX의 중괄호 {} 안에서 for는 인식이 안된다.     
+- JSX의 {}안에서 반복문 사용하기: `map()`이라는 함수를 사용한다        
+  - e.g. 방법 1     
+    ```js
+      import React, { useState } from "react";
+      import "../src/App.css";
+
+
+      function App() {
+        const [title, setTitle] = useState(["남자 코트 추천", "여자 코트 추천", "강남 직장인 데일리 코디"]);
+
+        return (
+          <div className="App">
+            <div className="black-nav">
+              <div>개발 Blog</div>
+            </div>
+
+            {/* <div className="list">
+              <h3>{ title[0] }</h3>
+              <p>2월 17일 발행</p>
+              <hr />
+            </div>
+            <div className="list">
+              <h3>{ title[1] }</h3>
+              <p>2월 17일 발행</p>
+              <hr />
+            </div>
+            <div className="list">
+              <h3>{ title[2] }</h3>
+              <p>2월 17일 발행</p>
+              <hr />
+            </div> */}
+
+            
+            {/* JSX의 {}안에서 유사반복문 map() 함수를 사용하여 반복되는 코드를 줄이는 방법 */}
+            {
+              title.map((eachTitle) => {
+                return (
+                <div className="list">
+                  <h3>{ eachTitle }</h3>
+                  <p>2월 17일 발행</p>
+                  <hr />
+                </div>
+                )
+              })
+            }
+          </div> 
+        );
+      }
+
+
+<br />
+<hr />
+<br />
+
+## 유용한 문법: props - 자식 컴포넌트가 부모 컴포넌트의 state를 가져다 쓰는 것은 가능! 단, "말하고 사용해야 한다"!
+- 자식 컴포넌트는 부모 컴포넌트가 갖고있는 값(state)를 사용할 수 있다.     
+다만, 자식이 부모에게 말하고 사용해야지 부모가 값을 전송해주는데 ...       
+이것이 가능하려면 우리는 **props**라는 문법을 사용해야 한다. 
+- props 사용방법: 
+  - step - 1: `<자식컴포넌트 작명={state명} />`      
+    - e.g.       
+    `<Modal myTitle={title}></Modal>`
+  - step - 2: `props를 자식컴포넌트에서 파라미터로 받아와야 한다`
+    -  e.g.       
+      ```js
+        function 자식컴포넌트(props) {    //  cf. 부모에서 전달받은 props는 여기 다 들어있다! 관습적으로 props라고 적어준다. 하지만 작명은 모두 다 가능~
+          
+          return(
+            // ...
+            // e.g. 
+            <h2>제목 { props.title[0]} </h2>
+            <p>날짜</p>
+            <p>상세내용</p>
+          );
+        }
+      ```
+    -  e.g. 응용             
+      ```js
+        import React, { useState } from "react";
+        import "../src/App.css";
+
+
+        function App() {
+          const [title, setTitle] = useState(["남자 코트 추천", "여자 코트 추천", "강남 직장인 데일리 코디"]);
+          const [modal, setModal] = useState(false);
+
+          // Component
+          function Modal (props) {
+            return (
+              <div className="modal">
+                {/* <h2>제목</h2> */}
+                <h2> { props.myTitle[1] } </h2>
+                <p>날짜</p>
+                <p>상세내용</p>
+              </div>
+            );
+          }
+
+
+          return (
+            <div className="App">
+              <div className="black-nav">
+                <div>개발 Blog</div>
+              </div>
+              
+              {
+                title.map((eachTitle) => {
+
+                  return (
+                  <div className="list">
+                    <h3>{ eachTitle }</h3>
+                    <p>2월 17일 발행</p>
+                    <hr />
+                  </div>
+                  )
+
+                })
+              }
+
+              <button onClick={() => {setModal(!modal)}}>모달창 열고 닫기 버튼</button>
+              {modal ? <Modal myTitle={title} /> : null}
+
+            </div>
+          );
+        }
+
+
+        export default App;
+      ```
+
+
+
+
+
 
 
 
@@ -223,6 +564,96 @@
     /* eslint-disable */
   ```
 
+>>> Latte is Horse - class를 이용한 옛날 옛적의 React 문법
+- 리액트의 예전 문법인 class를 사용하여 component 만드는 방법 
+  - e.g.        
+    ```js 
+      import React, {Component} from 'react';
+
+      // cf. class형 Component는 e.g. function App() {} 밖에서 작성하기  
+      class Profile extends React.Component {
+        constructor () {
+          super();
+        }
+
+        render() {
+          return (
+            <div>프로필입니다</div>
+          );
+        }
+      }
+    ```     
+    위와 같이 작성하고 함수형 컴포넌트를 만들고 사용했던 것처럼 내가 사용하고 싶은 곳에다가 넣어서 사용하면 된다.    
+  - `class`라는 문법은 쉽게 얘기하면 변수와 함수의 덩어리라고 할 수 있다.       
+  - `extends`라는 문법은 extends 옆에 오른쪽에 위치한 아이의 성질을 물려받겠다... 라는 의미로 사용.       
+  ~~즉, 리액트의 컴포넌트를 만들건데 이름은 Profile, 그리고 class로 컴포넌트를 만들거다~ 이런의미!~~
+
+- 리액트에서 class로 state를 만들고 사용하는 방법 
+  - e.g. state는 어디다가 저장?        
+    ```js 
+      class Profile extends React.Component {
+        constructor () {
+          super();
+          // 여기다가 state 작성
+          this.state = { name: "Kim", age: 30 };
+        }
+
+        render() {
+          return (
+            <div>
+              <h3>프로필입니다</h3>
+              {/* 여기서 아해 state에서 그냥 { name }이라고 하면 안된다! 무조건 this.state + name 으로 더해서 ... -> { this.state.name } -> useState에 비해 state 사용이 복잡 ...  */}
+              <p>저는 { this.state.name } 입니다</p>
+              {/* 예전 문법에서는 useState가 없어서, state를 변경할 때 setState() 라는 함수를 사용했었다.  setState() 함수도 사용하려면 앞에 this.를 붙여줘야 한다!  */}
+              <button onClick={ () => { this.setState( {name: "Park"} ) }}>버튼</button>
+            </div>
+          );
+        }
+      }
+    ```    
+- 함수를 만들어야 하면 어디다가 만드나요..? 
+  - 리액트 class형 컨포넌트에 커스텀 함수를 만들어야 하면, class 내부에서 만들어 준다;         
+  e.g.          
+    ```js     
+      // Components - class형
+      class Profile extends Component {
+        constructor () {
+          super();
+          // 여기다가 state 작성
+          this.state = { name: "Kim", age: 30 };
+        }
+
+        // 커스텀 함수 
+        changeName () {
+          this.setState( {name: "park"} )
+        }
+
+        render() {
+          return (
+            <div>
+              <h3>프로필입니다</h3>
+              <p>저는 { this.state.name } 입니다. 나이는 { this.state.age }</p>
+              {/* 이때, 커스텀 함수를 만들어서 사용할 때는 this.커스텀함수이름 -> 이런 형태로만 사용 가능! && class라는 문법에서 this는 앞으로 생성될 인스턴스를 가리키는 것이 아니기 떄문에 this.커스텀함수이름.bind(this)를 사용해주어야 한다!!!
+
+              TIP! 
+              만약 this.커스텀함수이름.bind(this)를 사용하기 싫으면 애초에 커스텀 함수를 만들 때, arrow function으로 만들면 됨!! 
+                e.g. 
+                changeName = () => {
+                  this.setState( {name: "Park"} ) 
+                }
+              이런식으로!! 
+
+              즉, 함수를 갖다 쓰든, state를 갖다 쓰든 class형 컴포넌트는 this를 잊지 말아야한다!!! */}
+              <button onClick={this.changeName.bind(this)}>버튼</button>
+            </div>
+          );
+        }
+      }
+
+    ```
+
+
+
 
 
 <br /> 
@@ -235,6 +666,9 @@
 
   - cf. 
     - https://web-front-end.tistory.com/3
+    - https://m.blog.naver.com/mym0404/221806696015
+    - https://velog.io/@sdc337dc/0.%ED%81%B4%EB%9E%98%EC%8A%A4%ED%98%95-%EC%BB%B4%ED%8F%AC%EB%84%8C%ED%8A%B8
+    - https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable
     - 
 
 </details>
