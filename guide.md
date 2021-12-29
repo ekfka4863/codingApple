@@ -542,11 +542,79 @@
       ```
 
 
+<br />
+<hr />
+<br />
+
+## 유용한 문법: import와 export 문법으로 길어진 코드를 외부 파일로 모듈화 
+- 한 파일 내에 코드가 너무 길어지만 파일을 쪼개는 것이 좋다.    
+이럴 때 사용하는 문법이 `import/export`이다.     
+
+<br />
+
+> export default 문법
+- e.g.        
+  ```js
+    // data.js 
+
+    var 중요데이터 = 'Kim';
+    export default 중요데이터;
+  ```
+- 설명:     
+파일에서 중요한 변수를 export하고 싶을 땐 **export default**라는 문법을 쓰고, 우측에 배출을 원하는 변수를 담아주면 된다.     
+  - 변수명, 함수명, 자료형 전부 "배출" 가능 
+  - 파일마다 export default라는 키워드는 하나/한번만 사용가능하다 
+
+<br />
+
+> import 문법 
+- e.g.        
+  ```js
+    // App.js 파일
+
+    import 중요데이터 from './data.js';
+  ```
+- 설명:     
+예를 들어, App.js에서 data.js 에서 배출한 변수를 쓰고싶다면 **import 변수명 from "파일경로"**라고 작성해서 다른 파일에서 배출한 변수를 갖다쓸 수 있다.     
+  - 변수명이라는 부분은 자유롭게 작명 가능 
+  - 경로 쓸때 "./"는 현재 경로를 의미
+
+<br />
+
+> export {} 문법
+- e.g.        
+  ```js
+    // data.js 파일
+
+    var name1 = 'Kim';
+    var name2 = 'Park';
+    export { name1, name2 }
+  ```
+- 설명:     
+여러개의 변수들을 내보내고싶으면 export default 말고 **export {}** 문법을 사용한다.    
+단, 이 문법에서는 <u>꼭 변수나 함수명이 있어야 한다</u>.      
+
+<br />
+
+> import {} 문법
+- e.g.        
+  ```js
+    // App.js 파일
+
+    import { name1, name2 } from './data.js';
+  ```
+- 설명:        
+export {} 이걸로 내보낸 변수들을 갖다쓰고 싶으면 **import {} 문법**을 사용한다.         
+{} 안에는 export {} 했던 변수명을 원하는 것만 골라서 써주면 된다.          
+<u>단, 이 경우는 작명이 불가능하고 export 했던 변수명 그대로 써야한다</u>.        
 
 
 
+<br />
+<hr />
+<br />
 
-
+## 유용한 문법: 데이터를 HTML에 데이터바인딩 하는 방법
 
 
 
