@@ -32,12 +32,16 @@ function App() {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="me-auto">
-                <Nav.Link>
+                {/* 
+                  Nav.Link도 a태그고 Link도 a 태그라서 콘솔창에 warning이 계속 뜨니까 없애고 싶으면 아래와같이 ... 
+                  그리고 as={Link}는 "지금 현재 태그를 링크 태그로 사용해주세요" 라는 의미!
+                */}
+                <Nav.Link as={Link} to="/">Home  
                   {/* 리액트 라우터를 이용한 버튼/ a 태그 만들기 */}
-                  <Link to="/">Home</Link>   
+                  {/* <Link to="/">Home</Link>    */}
                 </Nav.Link>
-                <Nav.Link>
-                  <Link to="/detail">Detail</Link>
+                <Nav.Link as={Link} to="/detail">Detail
+                  {/* <Link to="/detail">Detail</Link> */}
                 </Nav.Link>
                 <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                   <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>

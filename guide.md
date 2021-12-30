@@ -1035,7 +1035,69 @@ e.g.
 
 ## 유용한 문법: useEffect 
 - `Lifecycle Hook` (옛날 사람)   vs  `useEffect` (요즘 사람)
+  - 컴포넌트는 lifecycle이 있다
+    - 컴포넌트 생성(등장) - 업데이트(재렌더링) - 삭제(퇴장)    
+    - 근데, 컴포넌트의 lifecycle에는 "Hook"이라는 것도 존재한다.     
+    이 "훅(낚시바늘)"이란 걸로 "컴포넌트 lifecycle 생성 전에 ~~좀 해주세요", "컴포넌트 lifecycle 업데이트 전에 ~~좀 해주세요"... 등 처럼 컴포넌트의 "인생 중간중간에 뭔가 명령을 줄 수 있게 해주는 역할/기능"이다
+    - 예전에 class형 컴포넌트를 사용했을 때는 아래와 같은 `Lifecycle Hook`을 사용했었다....      
+    (하지만 요즘은 NO!!!)     
+      - e.g.      
+        ```js
+          class 컴포넌트이름 extends React.Component {
+            componentDidMount(){
+              // 컴포넌트가 Mount 되고나서 실행할 코드
+            }
+            componentWillUnmount(){
+              // 컴포넌트가 Unmount 되기전에 실행할 코드
+            }
+          }
+        ```
 
+<br />
+
+> useEffect 사용 방법
+- 요즘의 리액트 개발에서는 useEffect를 많이 사용 
+- 사용 방법:      
+  그냥 function 컴포넌트 안에 넣어주기만 하면 된다!     
+  (단, return 나오기 전에!)      
+  - e.g.      
+    ```js
+      import React, {useState, useEffect} from 'react';
+
+      function 컴포넌트이름(){
+
+        useEffect(()=>{
+          //코드
+        });
+        
+        return (
+          <HTML 태그들/>
+        )
+      }
+    ```
+    
+<br />
+
+> useEffect 유의 사항:     
+  - 페이지 상단에서 useEffect를 import 한 후에 
+  - useEffect()를 사용해야 한다  
+  - 그리고 () 안에 콜백함수를 넣어줘야 한다 
+  - 콜백함수 안에는 **컴포넌트가 첫 등장하고 나서 실행하고 싶은 코드** 가 있으면 적어주면 된다.         
+  ~~(cf. 조금 더 자세히는... useEffect() 내 콜백함수 안에 코드가 실행되는 조건은 ...       
+  1. 컴포넌트가 첫 등장해서 로딩이 끝난 후에 (전문 용어로 mount 끝났을 때)       
+  그리고 2. 컴포넌트가 재렌더링 되고난 후 때 (전문 용어로 update 되고난 후에)이다.)~~            
+  - useEffect는 나란히 여러개 사용해도 되지만, 적은 순서대로 순차적으로 실행이 된다는 점 유의!    
+
+<br />
+
+> useEffect  언제 사용?     
+- 컴포넌트 로드시 or 업데이트시 뭔가 코드 실행하고 싶은게 있으면 여기다 적으면 된다!     
+  - e.g.      
+    API 불러올 때 ...          
+
+<br />
+
+> useEffect ........
 
 
 
