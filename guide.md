@@ -588,7 +588,7 @@
 
     var name1 = 'Kim';
     var name2 = 'Park';
-    export { name1, name2 }
+    export { name1, name2 }   // cf. default 없애기!
   ```
 - 설명:     
 여러개의 변수들을 내보내고싶으면 export default 말고 **export {}** 문법을 사용한다.    
@@ -601,7 +601,7 @@
   ```js
     // App.js 파일
 
-    import { name1, name2 } from './data.js';
+    import { name1, name2 } from './data.js';    // 작명 불가
   ```
 - 설명:        
 export {} 이걸로 내보낸 변수들을 갖다쓰고 싶으면 **import {} 문법**을 사용한다.         

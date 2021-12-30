@@ -1,8 +1,24 @@
-import React from "react";
+/* eslint-disable */
+
+import React, { useState } from "react";
 import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
 import "../src/App.css";
+import Data from"./data"
+// import { name1, name2 } from "./data";   // 단, 여러개를 같이 import 할 때는 작명 불가! 
 
 function App() {
+  const [shoes, setShoes] = useState(Data);
+
+  // Component 
+  function Card(props) {
+    return (
+      <div className="col-md-4">
+        <img src={'https://codingapple1.github.io/shop/shoes' + (props.index + 1) + '.jpg'} alt={'random shoes image' + (props.index + 1)} width="100%" />
+        <h4>{ props.shoes.title }</h4>
+        <p>{ props.shoes.content } & { props.shoes.price }</p>
+      </div>
+    );
+  }
   return (
     <>
       <div className="App">
@@ -29,6 +45,7 @@ function App() {
       
       <div className="jumbotron">
         <h1>20% Season off</h1>
+        {/* <p>Hello, { name1 }! & Good bye, { name2 }</p> */}
         <p>
           This is a simple hero unit, a simple jumbotron-style component for calling
           extra attention to featured content or information.
@@ -40,24 +57,28 @@ function App() {
 
       <div className="container">
         <div className="row">
-          <div className="col-md-4">
-            <img src="https://codingapple1.github.io/shop/shoes1.jpg" alt="random image 1" />
-            <h4>상품명</h4>
-            <p>상품정보</p>
-            box_01
+          {/* <div className="col-md-4">
+            <img src="https://codingapple1.github.io/shop/shoes1.jpg" alt="random shoes image 1" width="100%" />
+            <h4>{ shoes[0].title }</h4>
+            <p>{ shoes[0].content } & { shoes[0].price }</p>
           </div>
           <div className="col-md-4">
-            <img src="https://codingapple1.github.io/shop/shoes2.jpg" alt="random image 2" />
-            <h4>상품명</h4>
-            <p>상품정보</p>
-            box_02
+            <img src="https://codingapple1.github.io/shop/shoes2.jpg" alt="random shoes image 2" width="100%" />
+            <h4>{ shoes[1].title }</h4>
+            <p>{ shoes[1].content } & { shoes[1].price }</p>
           </div>
           <div className="col-md-4">
-            <img src="https://codingapple1.github.io/shop/shoes3.jpg" alt="random image 3" />
-            <h4>상품명</h4>
-            <p>상품정보</p>
-            box_03
-          </div>
+            <img src="https://codingapple1.github.io/shop/shoes3.jpg" alt="random shoes image 3" width="100%" />
+            <h4>{ shoes[2].title }</h4>
+            <p>{ shoes[2].content } & { shoes[2].price }</p>
+          </div> */}
+
+          { 
+            shoes.map((shoe, idx) => {
+              return <Card shoes={shoes[idx]} index={idx} key={idx} />    // cf. 반복문을 돌리면 key를 꼭 써라~~
+            })
+          }
+
         </div>
       </div>
 

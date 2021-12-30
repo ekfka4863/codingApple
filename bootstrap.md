@@ -66,17 +66,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 <br /> 
 <br /> 
 
@@ -89,10 +78,9 @@
     - https://react-bootstrap.github.io/
     - https://getbootstrap.com/docs/5.1/getting-started/introduction/
     - https://react-bootstrap.github.io/components/alerts
+    - https://dinfree.com/lecture/frontend/122_css_6.html
     - https://flamingotiger.github.io/style/react-bootstrap/
     - https://devlog.jwgo.kr/2019/01/17/how-to-use-bootstrap-in-react/
-    - 
-    - 
 
 </details>
 
