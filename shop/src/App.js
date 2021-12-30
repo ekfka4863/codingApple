@@ -23,24 +23,6 @@ function App() {
     );
   }
 
-  // function Detail() {
-  //   return (
-  //     <div className="container">
-  //       <div className="row">
-  //         <div className="col-md-6">
-  //           <img src="https://codingapple1.github.io/shop/shoes1.jpg" width="100%" />
-  //         </div>
-  //         <div className="col-md-6 mt-4">
-  //           <h4 className="pt-5">상품명</h4>
-  //           <p>상품설명</p>
-  //           <p>120000원</p>
-  //           <button className="btn btn-danger">주문하기</button> 
-  //         </div>
-  //       </div>
-  //     </div> 
-  //   )
-  // }
-
   return (
     <>
       <div className="App">
@@ -70,34 +52,36 @@ function App() {
         </Navbar>
       </div>
 
-      <Route exact path="/">
-        {/* <div>메인 페이지에요</div> */}
-        <div className="jumbotron">
-          <h1>20% Season off</h1>
-          <p>
-            This is a simple hero unit, a simple jumbotron-style component for calling
-            extra attention to featured content or information.
-          </p>
-          <div>
-            <button>Learn more</button>
+      {/* Switch로 모든 Route들 감싸기! */}
+      {/* <Switch> */}
+        <Route exact path="/">
+          {/* <div>메인 페이지에요</div> */}
+          <div className="jumbotron">
+            <h1>20% Season off</h1>
+            <p>
+              This is a simple hero unit, a simple jumbotron-style component for calling
+              extra attention to featured content or information.
+            </p>
+            <div>
+              <button>Learn more</button>
+            </div>
           </div>
-        </div>
-
-        <div className="container">
-          <div className="row">
-            { 
-              shoes.map((shoe, idx) => {
-                return <Card shoes={shoes[idx]} index={idx} key={idx} />    // cf. 반복문을 돌리면 key를 꼭 써라~~
-              })
-            }
+          <div className="container">
+            <div className="row">
+              {
+                shoes.map((shoe, idx) => {
+                  return <Card shoes={shoes[idx]} index={idx} key={idx} />    // cf. 반복문을 돌리면 key를 꼭 써라~~
+                })
+              }
+            </div>
           </div>
-        </div>
-      </Route>
+        </Route>
+        <Route path="/detail/:id">
+          <Detail shoes={shoes} />
+        </Route>
+      {/* </Switch> */}
 
-      <Route path="/detail">
-        {/* <div>디테일 페이지에요</div> */}
-        <Detail />
-      </Route>
+      {/* </div> */}{/* .App */}
     </>
   );
 }

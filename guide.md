@@ -822,13 +822,41 @@ e.g.
 
 <br />
   
-<!-- > Router의 switch 사용하는 방법 
+> Router의 switch 사용하는 방법 
 - `switch` 컴포넌트를 사용하면 어떤것이 가능??
-  -  -->
+  - 아까 위에서 예시로, `<Route path="/"></Route>` 안에 있는 HTML 코드는 `<Route path="/detail"></Route>` 로 경로가 바뀌어도 보여지는 것을 알 수 있었다.      
+  그래서 우리는 `<Route exact path="/"></Route>`이란 속성으로 이를 해결하기도 했었는데, switch 문법을 사용해도 이런 문제가 해결된다.     
+  - `<Switch></Switch>` 컴포넌트로 모든 `<Route></Route>`를 감싸면 **매치되는 \<Route>들을 전부 보여주지 말고 한번에 하나만 보여달라는 의미**이다.      
+    - e.g.          
+      ```js
+        // App.js 파일
 
+        function App(){
+          return (
+            <div>
+              <나머지HTML/>
+              <Switch>
+                <Route exact path="/">
+                  ...
+                </Route>
+                <Route path="/detail">
+                  <Detail/>
+                </Route>
+                <Route path="/:id">
+                  <div>새로 만든 route입니다</div>
+                </Route>
+              </Switch>
+            </div>
+          )
+        }
+      ``` 
+      - 이렇게 Switch 컴포넌트로 모든 Route들을 감싸게되면 여러개의 Route가 매칭이 되어도 **맨 위의 Route 하나만** 보여준다.        
+      그래서 경로문제에 exact 속성을 쓰지 않고 문제를 해결할 수 있다.     
+      - [사용방법 참고 링크](https://baeharam.netlify.app/posts/react/why-switch-is-needed)
+      
+<br />
 
-
-- [extra information]
+>> extra information 👀
   -📍 Tip!       
   BrowserRouter 말고 HashRouter라는 컴포넌트가 있는데, HashRouter로 라우팅을 하면 사이트를 이동할 때 주소가 e.g. https:// _____.com/#/ ... 이런식으로 주소가 바뀐다.               
   우리는 BrowserRouter로 하는데, HashRouter의 장점은 조금 더 안전한 라우팅이 가능하다.        
@@ -842,8 +870,11 @@ e.g.
   이런 것을 방지하기 위해 BrowserRouter를 사용해서 라우팅을 할 경우 서버에서는 서버 라우팅을 방지하는 API를 작성해둬야한다.           
 
 
+<br />
+<hr />
+<br />
 
-
+## 유용한 문법: 
 
 
 
@@ -974,6 +1005,10 @@ e.g.
     - https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable
     - https://react.vlpt.us/react-router/04-extra.html
     - https://velog.io/@josworks27/react-router-dom-history
+    - https://baeharam.netlify.app/posts/react/why-switch-is-needed
+    - https://velog.io/@hoon_dev/%EB%A6%AC%EC%95%A1%ED%8A%B8-%EC%8B%9C%EC%9E%91%ED%95%98%EA%B8%B0Route-Link-Switch-5
+    - 
+    - 
     - 
 
 </details>
