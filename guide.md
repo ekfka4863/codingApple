@@ -874,9 +874,167 @@ e.g.
 <hr />
 <br />
 
-## 유용한 문법: 
+## 유용한 문법: styled-component 라이브러리 사용하는 방법
+- component가 많아짐에 따라 css를 작성하는데 어려움이 생긴다.     
+한군데에 다 몰아넣으면 많은 컴포넌트들 중 클래스 명이 중복되는 경우가 생길 수도 있고, 만약 컴포넌트만다 따로 따로 css를 작성한다고 하면 그만큼 너무 많은 양의 css 파일이 생겨나기 때문.    
+- 그래서 ~~html 태그에서~~ class 선언없이 컴포넌트를 만들 때, 컴포넌트를 만듬과 동시에 css도 같이 지정해줄 수 있는 방식을 채택한 것이 바로 `styled-component`라는 라이브러리다.        
+(cf. CSS in JS라고도 부른다.)       
+- styled-components의 가장 큰 장점:     
+  - 컴포넌트가 많아지면 class 겹칠일이 줄어든다
+
+<br />
+
+> 설치 방법 
+- 터미널에서 `yarn add styled-components` 또는 `npm install styled-components` 라는 명령어로 설치
+
+<br />
+
+> 사용 방법
+- styled-components를 사용해서 컴포넌트를 만들 파일에 가서 파일 상단에 `import styled from 'styled-components';` 라고 작성 
+- 그리고 아래와 같이 작성;      
+  ```js
+    // Detail.js
+
+    import React from 'react';
+    import { useHistory, useParams } from 'react-router-dom';
+
+    // styled-components
+    import styled from 'styled-components';
+
+    const Box = styled.div`
+      width: 100%;
+      height: 40px;
+      background-color: #afe;
+    `;
+    const H4 = styled.h4` 
+      color: #333;    
+      font-weight: 800;
+    `;
 
 
+    function Detail(props) {
+     ...
+
+      return (
+        <div className="container">
+          <Box>
+           {/* styled-components -> props 받아와서 각각의 H4가 다른 색상을 갖게 한다 */}
+            <H4 color="blue">styled-components 연습 - 박스 1</H4>  
+            // 이때, props는 color={"blue"} 로 받아와도 되지만, 보낼이름="일반문자" 라면 그냥 ""로만 받아와도 된다.  
+            // 꼭 {}를 통해 가져와야 하는 props는 보낼이름={변수명} 일 때! 
+            <H4 color="red">styled-components 연습 - 박스 2</H4>
+            <H4 color="pink">styled-components 연습 - 박스 3</H4>
+          </Box>
+          ...
+        </div> 
+      )
+    }
+
+    export default Detail;
+  ```
+
+<br />
+<hr />
+<br />
+
+## 유용한 문법: css 대신 sass 사용하는 방법
+
+<br />
+
+> sass 설치 방법 
+- `yarn add node-sass` 또는 `npm install node-sass` 명령어로 설치
+- sass는 css를 좀 더 프로그래밍 언어"스럽게" 작성하기 위한 css 전처리기(preprocessor)다. 
+- sass는 css에서 변수, 연산자, 함수, extend, import, 등을 사용할 수 있게 해준다.    
+다만, 브라우저는 sass를 이해하지 못하기 때문에, sass로 작성하고 난 후 css로 "컴파일"해줘야한다.      
+이 모든 과정을 방금 설치한 "node-sass"가 해준다 : )
+
+<br />
+
+> sass 사용 방법 
+- step 1:    
+  - 우선, css를 적용시키고 싶은 파일로 가서 상단에 `import "../파일명.scss";` 를 불러온다 
+- step 2:    
+  - 그리고 지금 우리는 순수 css 코드를 작성하는 것이 아닌 sass를 사용할 생각이니까 `import "../파일명.scss";`라는 파일을 생성한다
+- step 3:    
+  - 생성한 .scss 파일에 이제 sass 문법으로 원하는 styling을 해주면 된다   
+
+<br />
+
+> sass 기본 문법 
+- 예시를 통해 이해하기!
+  - e.g.              
+    ```scss
+      // Detail.scss
+
+      // 2) sass 문법: @import 파일 경로 사용  
+      @import "./reset.scss";
+
+      // 1) sass 문법: 변수 
+      $red : #ff0000;
+
+      .red {
+        color: $red;
+      }
+
+
+      // 3) sass 문법: 중첩 (nesting)
+      .row {
+        h4 {
+          color: teal;
+        }
+        p {
+          color: purple;
+        }
+      }
+
+
+      // 4) sass 문법: @extend 
+      .myAlert {
+        background-color: #eee;
+        padding: 15px;
+        border-radius: 5px;
+        max-width: 500px;
+        width: 100%;
+        margin: auto;
+      }
+
+      .myAlert2 {
+        @extend .myAlert;    // .myAlert 가 갖고있는 모든 css를 여기다 넣겠다는 의미
+        // 대신 바꾸고 싶거나 추가하고 싶은 css가 있으면 여기다 자유롭게 적는다...
+        background-color: #ffd95e;
+      }
+
+
+      // 5) sass 문법: @mixin / @include
+      /* 기본 문법 
+        @mixin 함수명() {
+          ...
+        }
+
+        element {
+          @include 함수명;
+        }
+      */ 
+
+      @mixin myAlertMixin {
+        width: 500px;
+        margin: auto;
+        border-radius: 30px;
+        background-color: #ead;
+        color: #fff;
+        text-decoration: dashed;
+      }
+      .myAlert3 {
+        @include myAlertMixin;
+      }
+    ```
+
+<br />
+<hr />
+<br />
+
+## 유용한 문법: useEffect 
+- `Lifecycle Hook` (옛날 사람)   vs  `useEffect` (요즘 사람)
 
 
 
