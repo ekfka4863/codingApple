@@ -6,7 +6,7 @@ import "../src/App.css";
 import Data from"./data"
 
 import { Link, Route, Switch } from 'react-router-dom'; 
-import Detail from "./Detail";
+import Detail from "./component/Detail";   // src 내에 컴포넌트 파일만 모아놓은 폴더를 만들기도 한다
 
 
 function App() {
@@ -50,8 +50,13 @@ function App() {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="me-auto">
-                <Nav.Link href="#home">Home</Nav.Link>
-                <Nav.Link href="#link">Link</Nav.Link>
+                <Nav.Link>
+                  {/* 리액트 라우터를 이용한 버튼/ a 태그 만들기 */}
+                  <Link to="/">Home</Link>   
+                </Nav.Link>
+                <Nav.Link>
+                  <Link to="/detail">Detail</Link>
+                </Nav.Link>
                 <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                   <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
                   <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
@@ -88,12 +93,11 @@ function App() {
           </div>
         </div>
       </Route>
+
       <Route path="/detail">
         {/* <div>디테일 페이지에요</div> */}
         <Detail />
       </Route>
-
-
     </>
   );
 }

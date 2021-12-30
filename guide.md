@@ -734,14 +734,97 @@ HTML을 작성해도 좋지만 아래와 같이 component 자체를 불러올 �
       )
     }
   ```
-- 마무리...     
+- So...     
   - React-Router 특징:
     - 각각 페이지마다 다른 HTML 파일을 보여주는게 아니다.      
     HTML 내부의 내용을 라우팅으로 변경된 내용만 바꿔치기해줘서 다른 페이지에 이동한 것처럼 작동하기를 흉내내는 것일 뿐이다.         
     - HTML 은 단 하나 👉 **SPA** (cf. Single Page Application)
 
- 
+<br />
+  
+> 리액트 라우터를 사용하여 나눈 각각의 페이지로 이동하는 버튼 / a 태그 만들기 
+- 리액트 라우터에서는 a태그 역할을 하는 `<Link to="경로"></Link>` 컴포넌트가 존재한다
+- e.g.    
+버튼을 눌렀을 때 어떤 페이지로 이동하는 버튼을 만들고자 할 때...        
+`<Link to="경로">버튼</Link>` 형태로 만들어줄 것!          
 
+  ```js
+    // App.js 파일 참고! 
+
+    ...
+    <Nav className="me-auto">
+      <Nav.Link>
+        {/* 리액트 라우터를 이용한 버튼/ a 태그 만들기 */}
+        <Link to="/">Home</Link>   
+      </Nav.Link>
+      <Nav.Link>
+        <Link to="/detail">Detail</Link>
+      </Nav.Link>
+      <NavDropdown title="Dropdown" id="basic-nav-dropdown">
+        <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+        <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
+        <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+        <NavDropdown.Divider />
+        <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+      </NavDropdown>
+    </Nav>
+    ...
+  ```
+
+<br />
+  
+> react-router-dom의 history 객체를 사용해서 뒤로가기 버튼 만들기
+- 리액트에서 페이지를 나누고 이동할 수 있는 이유는 react-router-dom을 이용하여 "페이지의 기록을 알 수 있기 때문"이다.
+- 위의 예시에서 본 것과같이 Router로 컴포넌트의 Path와 라우팅할 컴포넌트를 정해줄 수 있었다.     
+그리고 해당하는 Router는 props를 통해 `history 객체`를 전달받게 된다.     
+history 객체를 콘솔로 찍어보면 **goBack()**, **goForward()** 등 앞/뒤로 이동할 수 있는 메소드 뿐만 아니라 다양한 메소드와 관련 객체들이 존재한다는 사실을 알 수 있다.      
+- 이 중 라우팅 변경을 위해 가장 자주 사용되는 메서드들로는...            
+  - 원하는 컴포넌트로 경로를 설정하여 이동할 수 있게 해주는 메서드인     
+  `history.push("이동하고자 하는 path")`, 
+  - 그리고 뒤로가기 기능이 있는 메서드인 `history.goBack()`이 있다.
+- history 객체의 `goBack()` 메서드를 이용해서 뒤로가기 버튼을 만들어 보자;     
+e.g.              
+  ```js
+    // component/Detail.js   
+
+    import { useHistory } from 'react-router-dom';   // useHistory를 사용하기 위해서는 import 
+
+    function Detail() {
+
+      // cf. 뒤로가기 버튼에 사용할 함수. history라는 object를 하나 생성한다. 
+      // 그리고 생성되는 history 객체는, 일종의 "사용자의 방문기록이 다 담긴 하나의 객체"라고 생각하면 된다
+      let history = useHistory();    
+
+
+      return (
+        <div className="container">
+          <div className="row">
+            <div className="col-md-6">
+              <img src="https://codingapple1.github.io/shop/shoes1.jpg" width="100%" />
+            </div>
+            <div className="col-md-6 mt-4">
+              <h4 className="pt-5">상품명</h4>
+              <p>상품설명</p>
+              <p>120000원</p>
+              <button className="btn btn-danger">주문하기</button> 
+              <button className="btn btn-danger" onClick={() => {
+                history.goBack();
+                // history.push('/');
+              }}>뒤로가기</button> 
+            </div>
+          </div>
+        </div> 
+      )
+    }
+
+    export default Detail;
+  ```
+
+<br />
+  
+<!-- > Router의 switch 사용하는 방법 
+- `switch` 컴포넌트를 사용하면 어떤것이 가능??
+  -  -->
 
 
 
@@ -889,6 +972,8 @@ HTML을 작성해도 좋지만 아래와 같이 component 자체를 불러올 �
     - https://m.blog.naver.com/mym0404/221806696015
     - https://velog.io/@sdc337dc/0.%ED%81%B4%EB%9E%98%EC%8A%A4%ED%98%95-%EC%BB%B4%ED%8F%AC%EB%84%8C%ED%8A%B8
     - https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable
+    - https://react.vlpt.us/react-router/04-extra.html
+    - https://velog.io/@josworks27/react-router-dom-history
     - 
 
 </details>

@@ -1,6 +1,14 @@
 body {
   text-align: center;
 }
+.me-auto a {
+  text-decoration: none;
+}
+.me-auto a:hover {
+  color: #0244b0;
+  font-weight: 500;
+}
+
 
 .jumbotron {
   display: flex;
