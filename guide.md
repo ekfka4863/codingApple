@@ -614,7 +614,153 @@ export {} 이걸로 내보낸 변수들을 갖다쓰고 싶으면 **import {} �
 <hr />
 <br />
 
-## 유용한 문법: 데이터를 HTML에 데이터바인딩 하는 방법
+## 유용한 문법: React Router - 페이지 나누기 (라우팅)
+- `react-router-dom` 라이브러리 사용
+
+<br />
+
+>  설치방법:     
+  ```
+    $ npm install react-router-dom@5
+
+    또는 
+
+    $ yarn add react-router-dom@5
+  ```
+
+<br />
+
+> 초기 세팅 방법 
+  - `index.js`로 가서 react-router-dom 초기셋팅을 한다;              
+    ```js
+      // Router 초기셋팅    
+      import { BrowserRouter } from 'react-router-dom';    // cf. BrowserRouter라는 컴포넌트를 불러온다
+
+      // 그리고 렌더링하고 싶은 컴포넌트를 BrowserRouter라는 "컴포넌트"로 감싼다 
+      ReactDOM.render(
+        <React.StrictMode>    // 이렇게!
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>    // 글구 이렇게!
+        </React.StrictMode>,
+        document.getElementById('root')
+      );
+
+
+      // 초기셋팅 끝
+    ```
+
+<br />
+  
+> 페이지 나누는 방법
+- `App.js`로 가서 Route를 만들어 보자!         
+  (= 라우팅으로 페이지를 나눠보자!)          
+- step - 1:     
+우선, `App.js`로 가서 'react-router-dom' 라이브러리에서 몇가지를 import 해온다            
+  ```js
+    import { Link, Route, Switch } from 'react-router-dom';   // cf. 각각, component들이다     
+  ```
+- step - 2: Route 컴포넌트와 path 속성을 사용해서 `<Route path="/경로"></Route>` 안에 경로를 설정한다
+  ```js
+    import { Link, Route, Switch } from 'react-router-dom';        
+
+    function App() {
+      return (
+        <Route path="/"></Route>
+        <Route path="/detail"></Route>
+      )
+    }
+  ```
+- step - 3: <Route></Route>안에 HTML 넣어주기
+  ```js
+    import { Link, Route, Switch } from 'react-router-dom';        
+
+    function App() {
+      return (
+        <Route path="/">
+          <div>메인 페이지에요</div>
+        </Route>
+        <Route path="/detail">
+          <div>디테일 페이지에요</div>
+        </Route>
+      )
+    }
+  ```
+- 근데 이때!      
+경로가 '/'일때 보여주는 내용을, 경로가 '/detail'일 때도 보여준다.    
+e.g.     
+경로가 '/detail'인데, 화면에는 "메인 페이지에요"와 "디테일 페이지에요"가 둘 다 보여진다.     
+그 이유는 매칭이 된다고 하면 전부 보여주기 때문.     
+이것이 싫다고 하면 Route의 `exact` 속성을 사용한다;      
+  ```js
+    import { Link, Route, Switch } from 'react-router-dom';        
+
+    function App() {
+      return (
+        <Route exact path="/">
+          <div>메인 페이지에요</div>
+        </Route>
+        <Route path="/detail">
+          <div>디테일 페이지에요</div>
+        </Route>
+      )
+    }
+  ```
+- 그리고!!    
+만약 Route로 어떤 경로로 이동했을 때 컴포넌트를 보여주고 싶으면, <Route></Route>dksdpekrk
+HTML을 작성해도 좋지만 아래와 같이 component 자체를 불러올 수도 있다;       
+  ```js
+    import { Link, Route, Switch } from 'react-router-dom';        
+
+    function App() {
+      
+      // Component 
+      function Modal() {
+          return (
+            <div>modal : )</div>
+          )
+        }
+
+      return (
+        <Route exact path="/">
+          <div>메인 페이지에요</div>
+        </Route>
+        <Route path="/detail">
+          <div>디테일 페이지에요</div>
+        </Route>
+
+        <Route path="/modal" component={Modal}></Route> 
+
+      )
+    }
+  ```
+
+
+
+
+
+- [extra information]
+  -📍 Tip!       
+  BrowserRouter 말고 HashRouter라는 컴포넌트가 있는데, HashRouter로 라우팅을 하면 사이트를 이동할 때 주소가 e.g. https:// _____.com/#/ ... 이런식으로 주소가 바뀐다.               
+  우리는 BrowserRouter로 하는데, HashRouter의 장점은 조금 더 안전한 라우팅이 가능하다.        
+  왜냐면, 원래 주소창은 "서버에게 어떤 요청을 내리는 심오한 공간"이다.          
+  근데 리액트는 e.g. https:// _____.com/subpage1/... 이런 식으로 .../subpage1에 접속하면 이런 페이지 .../subpage2에 접속하면 저런페이지 보여주세요~~ 를 리액트가 알아서 해주는 것일 뿐이다.             
+  그래서 혹시라도 서버에게 잘못된 요청을 보내지 않기 위해           
+  e.g. https:// _____.com/#/subpage1/... 이런식으로 hashtag를 붙여주는 라우팅 방식이 HashRouter라는 컴포넌트를 이용한 라우팅 방식이고, 이것이 이런 의미에서 조금 더 안전하다고 하는 것!                
+  사이트 주소 뒤에 #이 붙는데, # 뒤에 적은 것은 "서버로 전달되지 않는다".            
+  반대로, BrowserRouter은 가끔 의도치 않게 서버에 없는 페이지를 열어달라 요청을 할 수 있고,                   
+  그러면 서버: "어... 그런 페이지 없는데요?!?!"라고 할 수 있다.                  
+  이런 것을 방지하기 위해 BrowserRouter를 사용해서 라우팅을 할 경우 서버에서는 서버 라우팅을 방지하는 API를 작성해둬야한다.           
+
+
+
+
+
+
+
+
+
+
 
 
 

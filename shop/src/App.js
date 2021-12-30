@@ -4,7 +4,9 @@ import React, { useState } from "react";
 import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
 import "../src/App.css";
 import Data from"./data"
-// import { name1, name2 } from "./data";   // 단, 여러개를 같이 import 할 때는 작명 불가! 
+
+import { Link, Route, Switch } from 'react-router-dom'; 
+
 
 function App() {
   const [shoes, setShoes] = useState(Data);
@@ -12,13 +14,21 @@ function App() {
   // Component 
   function Card(props) {
     return (
-      <div className="col-md-4">
+      <div className="col-md-4"> 
         <img src={'https://codingapple1.github.io/shop/shoes' + (props.index + 1) + '.jpg'} alt={'random shoes image' + (props.index + 1)} width="100%" />
         <h4>{ props.shoes.title }</h4>
         <p>{ props.shoes.content } & { props.shoes.price }</p>
       </div>
     );
   }
+
+  // function Modal() {
+  //   return (
+  //     <div>modal : )</div>
+  //   )
+  // }
+
+
   return (
     <>
       <div className="App">
@@ -43,9 +53,8 @@ function App() {
         </Navbar>
       </div>
       
-      <div className="jumbotron">
+      {/* <div className="jumbotron">
         <h1>20% Season off</h1>
-        {/* <p>Hello, { name1 }! & Good bye, { name2 }</p> */}
         <p>
           This is a simple hero unit, a simple jumbotron-style component for calling
           extra attention to featured content or information.
@@ -53,25 +62,41 @@ function App() {
         <div>
           <button>Learn more</button>
         </div>
-      </div>
+      </div> */}
 
-      <div className="container">
+      <Route exact path="/">
+        {/* <div>메인 페이지에요</div> */}
+        <div className="jumbotron">
+          <h1>20% Season off</h1>
+          <p>
+            This is a simple hero unit, a simple jumbotron-style component for calling
+            extra attention to featured content or information.
+          </p>
+          <div>
+            <button>Learn more</button>
+          </div>
+        </div>
+
+        <div className="container">
+          <div className="row">
+            { 
+              shoes.map((shoe, idx) => {
+                return <Card shoes={shoes[idx]} index={idx} key={idx} />    // cf. 반복문을 돌리면 key를 꼭 써라~~
+              })
+            }
+          </div>
+        </div>
+      </Route>
+      <Route path="/detail">
+        <div>디테일 페이지에요</div>
+      </Route>
+
+
+      {/* <Route path="/modal" component={Modal}></Route>  */}
+
+
+      {/* <div className="container">
         <div className="row">
-          {/* <div className="col-md-4">
-            <img src="https://codingapple1.github.io/shop/shoes1.jpg" alt="random shoes image 1" width="100%" />
-            <h4>{ shoes[0].title }</h4>
-            <p>{ shoes[0].content } & { shoes[0].price }</p>
-          </div>
-          <div className="col-md-4">
-            <img src="https://codingapple1.github.io/shop/shoes2.jpg" alt="random shoes image 2" width="100%" />
-            <h4>{ shoes[1].title }</h4>
-            <p>{ shoes[1].content } & { shoes[1].price }</p>
-          </div>
-          <div className="col-md-4">
-            <img src="https://codingapple1.github.io/shop/shoes3.jpg" alt="random shoes image 3" width="100%" />
-            <h4>{ shoes[2].title }</h4>
-            <p>{ shoes[2].content } & { shoes[2].price }</p>
-          </div> */}
 
           { 
             shoes.map((shoe, idx) => {
@@ -80,7 +105,7 @@ function App() {
           }
 
         </div>
-      </div>
+      </div> */}
 
     </>
   );
