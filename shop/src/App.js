@@ -103,7 +103,7 @@ function App() {
         </div>
       </Route>
       <Route path="/detail/:id">
-        <Detail shoes={shoes} />
+        <Detail shoes={shoes} stocks={stocks} setStocks={setStocks} />
       </Route>
     </>
   );

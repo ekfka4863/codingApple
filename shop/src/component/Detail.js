@@ -6,13 +6,7 @@ import "../Detail.scss";
 
 // styled-components
 import styled from 'styled-components';
-import { Alert } from 'bootstrap';
 
-// const Box = styled.div`
-//   width: 100%;
-//   height: 150px;
-//   background-color: #afe;
-// `;
 
 const H4 = styled.h4` 
   color: ${(props) => props.color};    
@@ -27,13 +21,6 @@ function Detail(props) {
   let currItem = props.shoes.find((item) => {
     return item.id == id;
   });
-
-
-  // useEffect 사용 -> 컴포넌트가 mount 되었을 때, 컴포넌트가 update 될 때 특정 코드를 실행할 수 있다
-  // useEffect(() => {
-  //   console.log("hello")
-  // });
-  // e.g.  http://localhost:3000/detail/1  -> 에서 보면 console.log("hello") 확인 가능!
 
   // 숙제: Detail 페이지 방문후 alert 창이 2초 후에 사라지게 하기!
   let [alertDisplay, setAlertDisplay] = useState(true);
@@ -50,8 +37,8 @@ function Detail(props) {
   const [inputData, setInputData] = useState("");
   const onInput = (e) => {
     setInputData(e.target.value);
-    // console.log(inputData);
   };
+
 
   return (
     <div className="container">
@@ -77,7 +64,24 @@ function Detail(props) {
           <h4 className="pt-5">{currItem.title}</h4>
           <p>{currItem.content}</p>
           <p>{currItem.price}</p>
-          <button className="btn btn-danger">주문하기</button> 
+
+          {/* 문제점: App 컴포넌트 > Detail 컴포넌트 > StockInfo 컴포넌트
+                      이런 구조일 때 ... 
+                      제품의 재고 데이터를 Detail 내의 StockInfo 안에 데이터 바인딩 하는 방법은??? 
+          */}
+          <StockInfo stocks={props.stocks} />
+
+          <button className="btn btn-danger" onClick={() => {
+            let newStocks = [];
+            
+            [...props.stocks].map((stockNum, idx) => {
+              // console.log(stockNum);  // 10  11  12
+              // console.log(stockNum - 1);  // 9  10  11
+              newStocks.push(stockNum - 1);
+              props.setStocks(newStocks); 
+              // console.log(newStocks);   // [9, 10, 11]
+            });
+          }}>주문하기</button> 
           <button className="btn btn-danger" onClick={() => {
             // history.goBack();
             history.push('/');
@@ -87,5 +91,14 @@ function Detail(props) {
     </div> 
   )
 }
+
+
+// Component
+function StockInfo(props) {
+  return (
+    <p> 제품 재고: {props.stocks[0]} </p>
+  )
+}
+
 
 export default Detail;

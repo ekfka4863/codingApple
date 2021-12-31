@@ -1203,20 +1203,113 @@ e.g.
       axios.post("서버URL", {id: "codingApple", pw: 1234}); 
     ```
 
+<br />
+<hr />
+<br />
 
+## 유용한 문법: 컴포넌트 내의 컴포넌트 내의 컴포넌트에 state를 전달하는 방법 (cf. 중첩한 컴포넌트들이 있으면 state 전달은 어떻게해요?!)    
+- 방법: **props를 쓰고 또 props를 사용**한다
+  - e.g.      
+  `App 컴포넌트 > Detail 컴포넌트 > StockInfo 컴포넌트` ...   
+  이런 구조일 때, 제품의 재고 데이터를 Detail 내의 StockInfo 안에 데이터 바인딩을 하려면 아래와 같이;        
+    ```js      
+      // App.js  
 
+      ... 
 
+      function App() {
+        ... 
+        const [stocks, setStocks] = useState([10, 11, 12]);   // shoes의 [0], [1], [2] 인덱스에 있는 제품의 재고 데이터
 
+        return (
+          ...
+          <Route path="/detail/:id">
+            <Detail shoes={shoes} stocks={stocks} setStocks={setStocks} />  //  -> 첫번째. props로 state 전달하기. 이때, 함수도 props로 전달시킬 수 있다는 사실!!  
+            // TIP! 사용할 때는 props를 전달받은 자식 컴포넌트에서 props.setStocks() 이렇게 사용하면 됨!
+          </Route>
+          ...
+        )
+      }
 
+      export default App;
+    ```
 
+    ```js      
+      // Detail.js   
 
+      ... 
+      function Detail() {
+        ...
 
+        return (
+          ...
+
+          <StockInfo stocks={props.stocks} />  // -> 두번째. 부모 컴포넌트인 App 에서 받아온 props로 state 전달 & 부모에게 받아온 props를 사용해서 props.stocks를 StockInfo 컴포넌트에서 사용하려면 위와 같이 다시 props를 전달!
+
+          ...
+        )
+      }
+
+      // Component
+      function StockInfo() {  
+        return (
+          <p>제품 재고: ???</p>
+        )
+      }
+
+      export default Detail;
+    ```
+
+    ```js      
+      // Detail.js   
+
+      ... 
+      function Detail() {
+        ...
+
+        return (
+          ...
+
+          <StockInfo stocks={props.stocks} />  
+
+          ...
+        )
+      }
+
+      // Component
+      function StockInfo(props) {  // -> 세번째. props로 state 전달하기 
+        return (
+          <p> 제품 재고: {props.stocks} </p>
+        )
+      }
+
+      export default Detail;
+    ```
+- 방법: redux 또는 useContext 훅을 사용한다       
+  ~~(cf. 난중에 더 알아볼 예정!)~~
+
+<br />
+
+> 결론 
+- 중첩한 컴포넌트들이 있으면 하위 컴포넌트가 몇개든 state/ 데이터 전송을 하려면 props를 쓴다.    
+몇번이고 사용 가능!   
+- 하지만 컴포넌트들이 중첩되어 있으면 데이터 하나를 전달하려고 props를 몇번이고 전달해야 하는 **불편함**이 있다.    
+그리고 **추척도 어려워 진다**!    
+  - 그래서 우리는 useContext() 또는 redux를 사용한다~
 
 <br />
 <hr />
 <br />
 
-## 유용한 문법: 
+## 유용한 문법: useContext
+
+
+
+
+
+
+
+
 
 
 <!-- <br />
@@ -1225,12 +1318,17 @@ e.g.
 
 <!-- ## 유용한 문법: useState - 중요한 데이터는 변수 말고 state로 만들기 -->
 
+<br />
+<hr />
+<br />
 
 >>> Extra Information
 - 변수를 만들어 놓고 사용하지 않으면, 에러는 아닌데 eslint가 이것에 대해 a warning을 보여줄 수 있다. 신경쓰이면 파일 상단에 아래와 같이 적어준다.       
   ```js 
     /* eslint-disable */
   ```
+
+<br />
 
 >>> Latte is Horse - class를 이용한 옛날 옛적의 React 문법
 - 리액트의 예전 문법인 class를 사용하여 component 만드는 방법 
@@ -1320,8 +1418,16 @@ e.g.
 
     ```
 
+<br />
 
-
+>>> 리액트 사이트 build & Github Pages로 배포하는 방법
+- 우리가 만든 리액트 프로젝트를 배포하려면 그냥 작업하던 `App.js` 파일을 그대로 올리는 것이 아니라 **build용 파일을 생성한 후** 그 파일을 올려야한다.       
+(cf. 왜냐면 웹브아루저는 HTML, CSS, JS -> 이 세개의 언어만 해석할 수 있으니까~    
+리액트의 state나 JSX같은 것은 알아듣지 못한다!    
+그래서 리액트 프로젝트를 <u>build</u> 라는걸 하면 브라우저 친화적인 HTML CSS JS 파일로 바꿔준다.)
+- 이제 그럼 build를 한 후 무료로 HTML 파일을 호스팅 해주는  Github Pages를 이용해 배포까지 해보도록 하자!    
+  - [깃허브 사이트]()로 이동. 계정이 없다면 계정 생성.
+<!-- ... 낼 다시 -->
 
 
 <br /> 
