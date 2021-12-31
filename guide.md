@@ -1076,7 +1076,7 @@ e.g.
       }
     ```
     - 그리고 두 번째 인자로는 배열 []이 오고, 배열 안에는 어떤 값을 계속 useEffect로 watch 하고싶은지를 넣어준다.     
-    만약 빈 배열이면 처음 렌더링 후 업데이트해도 코드가 실행되지 않는다.    
+    만약 빈 배열이면 처음 렌더링 후 업데이트해도 코드가 실행되지 않는다.       
     왜냐면 [] 안에는 어떤 값이 변경되었을 때 그 값을 계속 보고 있다가 변경되었을 때, 그때 useEffect를 실행하라는 의미인데...     
     []안에 아무것도 없기 때문에 변경이 일어나서 useEffect가 실행될 일도 없어짐!!   
     
@@ -1104,11 +1104,119 @@ e.g.
 <hr />
 <br />
 
+## 유용한 문법: 리액트에서 Ajax 요청하는 방법
+- Ajax:    
+  서버에 **새로고침없이** 요청을 할 수 있게 도와주는 역할
+- Ajax 사용 방법은 크게 3가지:  
+  - 1. jQuery 설치해서 $.ajax() 사용 
+  - 2. axios 라는 라이브러리를 설치해서 axios.get() 사용     
+  (cf. e.g.Vue랑 함께... & 장점: 3. fetch()보다 호환성 면에서 좋다)      
+  - 3. 최신 자바스크립트 문법인 fetch() 사용
+
+<br />
+
+> 2. axios 설치 방법
+- `yarn add axios` 또는 `npm install axios` 명령어로 설치
+
+<br />
+
+> 2. axios 사용 방법
+- axios를 사용할 파일에 가서 상단에 아래와 같이 import      
+  - e.g.     
+    ```js
+      // App.js
+
+      import axios from "axios";
+
+      ... 
+
+      function App () {
+        ...
+
+        return (
+          ...
+          <button className="btn btn-primary" onClick={() => {
+
+            // axios.get("https://codingapple1.github.io/shop/data2.json");   // cf. API 주소 자리. 협업하는 서버 개발자에게 어디서 상품 정보를 가져올까요 ?? 를 물어보면 됨!
+            // 이렇게 axios를 사용해서 ajax 요청을 하면 새로고침 없이 새로운 데이터 3개를 가져올 수 있게 된다
+
+            // axios.get("https://codingapple1.github.io/shop/data2.json")
+            // .then(() => {})      // 성공하면 .then()
+            // .catch(() => {});    // 실패하면 .catch()
+
+            axios.get("https://codingapple1.github.io/shop/data2.json")
+            .then(() => {     // 성공하면 .then()
+              console.log("성공했어요!");
+            })     
+            .catch(() => {   // 실패하면 .catch()
+              console.log("실패했어요ㅠㅠ");
+            });   
+
+          }}>더보기</button>
+          ...
+        )
+      }
+
+      export default App;
+    ```
+  - 위와같이 axios를 import하면 ajax 요청을 쉽게 할 수 있다.      
+  - 결과:    
+    - 버튼을 눌렀을 때, "성공했어요!" 가 콘솔창에 떠야한다 
+    - 만약 주소가 "https://codingapple1.github.io/shop/data9999.json"와 같이 잘못된 주소가 들어간 경우, 
+    `GET https://codingapple1.github.io/shop/data9999.json 404`와 같은 에러가 뜬다
+
+- 만약 위의 코드에서 우리가 원하는 데이터를 얻고 싶으면 아래와 같이;     
+  - e.g.     
+    ```js
+      axios.get("https://codingapple1.github.io/shop/data2.json")
+      .then((result) => {     // 성공하면 .then()
+        // console.log(result);
+        console.log(result.data);   // (3) [{…}, {…}, {…}]
+      })     
+      .catch(() => {   // 실패하면 .catch()
+        console.log("실패했어요ㅠㅠ");
+      });   
+    ```
+- 만약 3. 최신 자바스크립트 문법인 fetch()를 사용할거면 위의 예시에서 `axios.get()` 부분을 `fetch()`로 바꿔주면 된다.
+
+<br />
+
+> 우리가 서버에 요청해서 받아온 자료는 정확히 말하면 object가 아니다!?! (feat. JSON)
+- 만약 fetch()로 서버에 요청한 자료를 받아오면 우리는 정확히는 따옴표가 있는 JSON이라는 자료형을 받아오는 것이다
+- 근데 우리가 필요한 것은 객체!     
+그래서 우리는 받아온 JSON을 객체화해서 사용해야 한다.
+- 하지만 axios는 JSON 자료형의 따옴표를 알아서 없애줘서 Object로 자동으로 바꿔준다.  
+- ~~fetch API보다 axios가 더 좋은 장점:~~   
+  - ~~구형 브라우저를 지원한다~~
+  - ~~JSON 데이터 자동변환~~
+
+<br />
+
+> 서버에 데이터를 새로고침 없이 smooth하게 보내고 싶을 때 - POST 요청하는 방법
+- 서버로 몰래 정보를 전달하고 싶을 때 POST 요청을 한다
+  - e.g.     
+    ```js
+      // 서버에 데이터를 보내고 싶을 떄 - POST 요청하는 방법
+      //   - 기본 문법: axios.post("서버URL", 전달할데이터); 
+      //   - 장점: 요청시에 header 설정도 가능하다
+
+      axios.post("서버URL", {id: "codingApple", pw: 1234}); 
+    ```
+
+
+
+
+
+
+
+
+
+
+<br />
+<hr />
+<br />
+
 ## 유용한 문법: 
-
-
-
-
 
 
 <!-- <br />
@@ -1233,6 +1341,8 @@ e.g.
     - https://velog.io/@josworks27/react-router-dom-history
     - https://baeharam.netlify.app/posts/react/why-switch-is-needed
     - https://velog.io/@hoon_dev/%EB%A6%AC%EC%95%A1%ED%8A%B8-%EC%8B%9C%EC%9E%91%ED%95%98%EA%B8%B0Route-Link-Switch-5
+    - https://velog.io/@realryankim/TIL-Axios%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%B4%EC%84%9C-HTTP-%EC%9A%94%EC%B2%AD%ED%95%98%EA%B8%B0
+    - https://hazel-developer.tistory.com/145
     - 
     - 
     - 

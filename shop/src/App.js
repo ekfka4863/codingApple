@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
+import axios from "axios";
+
 import "../src/App.css";
 import Data from"./data"
 
@@ -11,6 +13,7 @@ import Detail from "./component/Detail";   // src 내에 컴포넌트 파일만 
 
 function App() {
   const [shoes, setShoes] = useState(Data);
+  const [stocks, setStocks] = useState([10, 11, 12]);   // shoes의 [0], [1], [2] 인덱스에 있는 제품의 재고 데이터
 
   // Component 
   function Card(props) {
@@ -56,36 +59,52 @@ function App() {
         </Navbar>
       </div>
 
-      {/* Switch로 모든 Route들 감싸기! */}
-      {/* <Switch> */}
-        <Route exact path="/">
-          {/* <div>메인 페이지에요</div> */}
-          <div className="jumbotron">
-            <h1>20% Season off</h1>
-            <p>
-              This is a simple hero unit, a simple jumbotron-style component for calling
-              extra attention to featured content or information.
-            </p>
-            <div>
-              <button>Learn more</button>
-            </div>
+      <Route exact path="/">
+        {/* <div>메인 페이지에요</div> */}
+        <div className="jumbotron">
+          <h1>20% Season off</h1>
+          <p>
+            This is a simple hero unit, a simple jumbotron-style component for calling
+            extra attention to featured content or information.
+          </p>
+          <div>
+            <button>Learn more</button>
           </div>
-          <div className="container">
-            <div className="row">
-              {
-                shoes.map((shoe, idx) => {
-                  return <Card shoes={shoes[idx]} index={idx} key={idx} />    // cf. 반복문을 돌리면 key를 꼭 써라~~
-                })
-              }
-            </div>
+        </div>
+        <div className="container">
+          <div className="row">
+            {
+              shoes.map((shoe, idx) => {
+                return <Card shoes={shoes[idx]} index={idx} key={idx} />    // cf. 반복문을 돌리면 key를 꼭 써라~~
+              })
+            }
           </div>
-        </Route>
-        <Route path="/detail/:id">
-          <Detail shoes={shoes} />
-        </Route>
-      {/* </Switch> */}
+          <button className="btn btn-primary" onClick={() => {
 
-      {/* </div> */}{/* .App */}
+            // 서버에 데이터를 보내고 싶을 떄 - POST 요청하는 방법
+            axios.post("서버URL", {id: "codingApple", pw: 1234}); 
+
+            // axios.get("https://codingapple1.github.io/shop/data2.json");   // cf. API 주소 자리. 협업하는 서버 개발자에게 어디서 상품 정보를 가져올까요 ?? 를 물어보면 됨!
+            // 이렇게 axios를 사용해서 ajax 요청을 하면 새로고침 없이 새로운 데이터 3개를 가져올 수 있게 된다
+
+            axios.get("https://codingapple1.github.io/shop/data2.json")
+            .then((result) => {     // 성공하면 .then()
+              // console.log(result);
+              // console.log(result.data);
+
+              // 새로운 데이터로 item list 3개 새롭게 생성 
+              setShoes( [...shoes, ...result.data] );
+            })     
+            .catch(() => {   // 실패하면 .catch()
+              console.log("실패했어요ㅠㅠ");
+            });   
+
+          }}>더보기</button>
+        </div>
+      </Route>
+      <Route path="/detail/:id">
+        <Detail shoes={shoes} />
+      </Route>
     </>
   );
 }

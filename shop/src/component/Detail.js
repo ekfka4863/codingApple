@@ -30,9 +30,9 @@ function Detail(props) {
 
 
   // useEffect 사용 -> 컴포넌트가 mount 되었을 때, 컴포넌트가 update 될 때 특정 코드를 실행할 수 있다
-  useEffect(() => {
-    // console.log("hello")
-  });
+  // useEffect(() => {
+  //   console.log("hello")
+  // });
   // e.g.  http://localhost:3000/detail/1  -> 에서 보면 console.log("hello") 확인 가능!
 
   // 숙제: Detail 페이지 방문후 alert 창이 2초 후에 사라지게 하기!
