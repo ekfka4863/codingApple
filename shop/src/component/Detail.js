@@ -7,6 +7,11 @@ import "../Detail.scss";
 // styled-components
 import styled from 'styled-components';
 
+// react-bootstrap 사용
+// import { Tabs, Tab, Sonnet } from 'react-bootstrap';
+
+// react-transition-group 사용 
+import { CSSTransition } from "react-transition-group";
 
 const H4 = styled.h4` 
   color: ${(props) => props.color};    
@@ -39,6 +44,8 @@ function Detail(props) {
     setInputData(e.target.value);
   };
 
+  // Tab 메뉴 관련 useState() 
+  const [currTab, setCurrTab] = useState(0);
 
   return (
     <div className="container">
@@ -88,6 +95,33 @@ function Detail(props) {
           }}>뒤로가기</button> 
         </div>
       </div>
+
+      {/* Tab 기능 만들기 */}
+      <div>
+        {/* <button>버튼0</button>
+        <button>버튼1</button>
+        <button>버튼2</button> */}
+
+        {/* <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example" className="mb-3">
+          <Tab eventKey="home" title="Home" onClick={ setCurrTab(0) } >
+            <Sonnet />
+          </Tab>
+          <Tab eventKey="profile" title="Profile" onClick={ setCurrTab(1) } >
+            <Sonnet />
+          </Tab>
+        </Tabs> */}
+        <div className="tab_menu_btn">
+          <button type="button" onClick={ setCurrTab(0) }>Tab1</button>
+          <button type="button" onClick={ setCurrTab(1) }>Tab2</button>
+        </div>
+
+        {/* <div>내용0</div>
+        <div>내용1</div>
+        <div>내용2</div> */}
+        <TabContent currTab={currTab} />
+        
+      </div>
+
     </div> 
   )
 }
@@ -100,5 +134,16 @@ function StockInfo(props) {
   )
 }
 
+function TabContent(props) {
+  if (props.currTab === 0) {
+    return <div>내용0</div>
+  } else if  (props.currTab === 1) {
+    return <div>내용1</div>
+  } else if  (props.currTab === 2) {
+    return <div>내용2</div>
+  }
+}
 
 export default Detail;
+
+

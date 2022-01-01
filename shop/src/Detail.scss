@@ -59,3 +59,17 @@ $red : #ff0000;
 .myAlert3 {
   @include myAlertMixin;
 }
+
+
+
+
+// Detail.js 
+.tab_menu_btn {
+  button {
+    width: 200px;
+    height: 80px;
+    background-color: #fff;
+    border: 1px solid #333;
+    color: #333;
+  }
+}

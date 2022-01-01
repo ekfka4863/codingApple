@@ -1470,10 +1470,41 @@ e.g.
 <hr />
 <br /> 
 
-## 유용한 문법: Tab 만들기와 리액트에서의 애니메이션 (cf. react-transition-group)
-- 
-- 
-- 
+## 유용한 문법: 리액트에서의 애니메이션 (= react-transition-group으로 router간 animation구현하기)
+
+<br /> 
+
+> 설치 방법 
+- `npm install react-transition-group` 또는 `yarn add react-transition-group` 명령어로 설치
+
+<br /> 
+
+> 사용 방법 
+- 애니메이션을 주고싶은 파일 상단엔 `import { CSSTransition } from "react-transition-group";` 불러오기 
+- [이후 내용은 블로그 참고!](https://13akstjq.github.io/react/2019/11/08/React-Transition-Group-%EC%99%84%EB%B2%BD-%EC%A0%95%EB%A6%AC%ED%95%98%EA%B8%B0.html)!
+  - 단, `<CSSTransition in={스위치역할boolean/true일때만작동} classNames={} timeout={}></CSSTransition>`로 감쌀 때는 **in, classNames={작명애니메이션이름}, timeout={몇ms}** 넣어주기!!    
+  - 위에서 `classNames={}` 안에 적어준 이름으로 (s)css 파일로 가서 애니메이션을 만들어준다.    
+  - 그리고 `in={}` 안에 들어가는 boolean은 변수나 state로 저장해서 쓰면 된다.     
+  e.g. 클릭했을 때 true/false로 바뀌게끔 ...    
+
+
+<br />
+<hr />
+<br /> 
+
+<!-- ## 유용한 문법: Redux - props 싫으면 사용 
+
+
+## 유용한 문법: Redux - reducer/dispatch로 데이터 수정하는 방법 
+
+
+## 유용한 문법: Redux - state와 reducer가 더 필요할 때 
+
+
+## 유용한 문법: Redux - dispatch 할 때 데이터 실어보낼 수 있는 방법 
+
+
+## 유용한 문법: Redux - useSelector, useDispatch  -->
 
 
 
@@ -1637,7 +1668,7 @@ e.g.
     - https://hazel-developer.tistory.com/145
     - https://ko-de-dev-green.tistory.com/67
     - https://github.com/ekfka4863/TIL/blob/master/React/React%20Basic/React_Context%20API%20%EB%A5%BC%20%EC%82%AC%EC%9A%A9%ED%95%9C%20%EC%A0%84%EC%97%AD%20%EA%B0%92%20%EA%B4%80%EB%A6%AC.md
-    - 
+    - [리액트 애니메이션 효과 - css transition using react-transition-group library](https://13akstjq.github.io/react/2019/11/08/React-Transition-Group-%EC%99%84%EB%B2%BD-%EC%A0%95%EB%A6%AC%ED%95%98%EA%B8%B0.html)
     - 
     - 
 
