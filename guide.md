@@ -1301,7 +1301,179 @@ e.g.
 <hr />
 <br />
 
-## 유용한 문법: useContext
+## 유용한 문법: useContext (feat. 중복된 컴포넌트들이 있을 때, props 말고 부모의 state를 전달하는 효율적인 방법)
+- 언제 사용? 
+  - 컴포넌트가 많을 때 props를 통해 state 전달하고 싶지 않을 때 Context API를 사용 
+  - 쉽게 얘기하자면, 내가 필요한 props를 글로벌하게 props의 전달이 없이도 하위 컴포넌트 어디서든 부모의 값을 사용할 수 있게 해주는 리액트 Hook/기능이라고 생각하면 되겠다  
+
+- 사용 방법:  
+  - step - 1:   
+    - Context API 사용하기 위해서 기억해야 할 것은 `React.createContext`이다.          
+    상위 컴포넌트 파일 상단에 가서 `React.createContext();`라고 작성          
+    - 위에서 적었던 내용을 변수에 할당.         
+    여기서 `React.createContext();`의 역할은 **같은 값을 공유하는 범위를 생성해 주는 문법/역할**이다.      
+    그리고 아래의 예시에서는 "같은 값을 공유하는 범위의 이름"을 변수에 할당해서 이름을 부여한 것. 
+      - e.g.       
+        ```js
+          // App.js 
+
+          import React, { useState } from "react";
+          ...
+
+          // useContext 사용 방법 
+          const stockContext = React.createContext();
+
+          function App () {
+            ... 
+            const [stocks, setStocks] = useState([10, 11, 12]);   // shoes의 [0], [1], [2] 인덱스에 있는 제품의 재고 데이터
+            ...
+
+            return (
+              ...
+            )
+          }
+
+          export default App;
+        ```
+     
+  - step - 2:        
+    - 파일 상단에 `import React, { useContext } from 'react';` 작성     
+    - 같은 값을 공유할 HTML을 "범위"로 감싼다.    
+    이때, 감싸는 범위의 형태는 `<범위이름.Provider></범위이름.Provider>`이다.      
+    또, `<범위이름.Provider value={}></범위이름.Provider>` 이라고 적고 **value** 안에 <u>공유하고 싶은 값을 넣는다</u>.        
+    (cf. 이때, value는 작명하는 것이 아니고, 무조건 value 라는 이름으로 들어간다.)      
+      - e.g.      
+        ```js
+          // App.js 
+
+          import React, { useState, useContext } from "react";
+          ...
+
+         // useContext 사용 방법 
+          const stockContext = React.createContext();   // 범위 이름 stockContext
+
+          function App () {
+            ... 
+            const [stocks, setStocks] = useState([10, 11, 12]);   
+
+            // Component 
+            function Card(props) {
+              return (
+                <div className="col-md-4"> 
+                  <img src={'https://codingapple1.github.io/shop/shoes' + (props.index + 1) + '.jpg'} alt={'random shoes image' + (props.index + 1)} width="100%" />
+                  <h4>{ props.shoes.title }</h4>
+                  <p>{ props.shoes.content } & { props.shoes.price }</p>
+                </div>
+              )
+            }
+
+            return (
+              ...
+              <div className="container">
+
+                <stockContext.Provider value={stocks}>
+                  <div className="row">
+                    {
+                      shoes.map((shoe, idx) => {
+                        return <Card shoes={shoes[idx]} index={idx} key={idx} />    // cf. 반복문을 돌리면 key를 꼭 써라~~
+                      })
+                    }
+                  </div>
+                </stockContext.Provider>
+
+                ...
+              </div>
+            )
+          }
+
+          export default App;
+        ``` 
+
+  - step - 3:          
+    - `useContext(범위 이름)`으로 공유된 값 사용하기        
+      - e.g.      
+        ```js
+          // App.js 
+
+          import React, { useState, useContext } from "react";
+          ...
+
+          // useContext 사용 방법 
+          const stockContext = React.createContext();   // cf. 범위 이름 stockContext
+
+          function App () {
+            ... 
+            const [stocks, setStocks] = useState([10, 11, 12]);   
+
+            // Component 
+            function Card(props) {
+
+              // useContext 
+              const stocks = useContext(stockContext);   // cf. 범위 이름 stockContext 여기서 사용!
+
+              return (
+                <div className="col-md-4"> 
+                  <img src={'https://codingapple1.github.io/shop/shoes' + (props.index + 1) + '.jpg'} alt={'random shoes image' + (props.index + 1)} width="100%" />
+                  <h4>{ props.shoes.title }</h4>
+                  <p>{ props.shoes.content } & { props.shoes.price }</p>
+
+                  {/* stocks[0] */}
+                  {stocks[props.i]}
+
+                </div>
+              )
+            }
+            ...
+
+            return (
+              ...
+              <div className="container">
+
+                <stockContext.Provider value={stocks}>
+                  <div className="row">
+                    {
+                      shoes.map((shoe, idx) => {
+                        return <Card shoes={shoes[idx]} index={idx} key={idx} />    // cf. 반복문을 돌리면 key를 꼭 써라~~
+                      })
+                    }
+                  </div>
+                </stockContext.Provider>
+
+                ...
+              </div>
+            )
+          }
+
+          export default App;
+        ``` 
+
+<br />
+
+- 정리: 
+  - 1.  `const __Context = React.createContext();`         
+    👉 useContext 사용하기 전에 범위 생성 
+    👉 이때, 만약 상위 컴포넌트안에 하위 컴포넌트가 생성되는 것이 아니고 하위 컴포넌트가 아예 다른 파일로 생성되어 있는데, 외부 하위 컴포넌트 파일에서 상위 컴포넌트의 Context에 있는 state를 사용해야하면...     
+    `export const __Context = React.createContext();` 처럼 **export**를 해주면 된다.           
+    👉 그리고 사용하려는 하위 컴포넌트 파일 상단에 가서 import 해준다.     
+    e.g. `import { stockContext } from "./App.js";`       
+    👉 하위 컴포넌트 return() 전에 `const __ = useContext(__Context);` 작성 및 사용     
+  - 2. 파일 상단에 `import React, { useContext } from 'react';` 작성         
+  &&         
+  같은 값을 공유할 HTML을 `<범위이름.Provider value={}></범위이름.Provider>`로 감싸고,      
+  안에는 value라고 적고 {} 안에는 공유하고 싶은 값을 넣어준다.      
+  - 3. 사용할 때는 공유하고 싶은 컴포넌트에 가서 `const __ = useContext(__Context);`라고 컴포넌트 내에서 공유된 값을 사용할 준비를 해준다
+- ~~만약 이런 것들이 힘들면... 사용하게 되는 것이 **Redux**라는 라이브러리!~~       
+  ~~리덕스 사용 이유: 모든 컴호넌트 파일들이 같은 값을 공유할 수 있는 저장공간 생성가능 + state 데이터 관리 기능~~     
+ 
+
+<br />
+<hr />
+<br /> 
+
+## 유용한 문법: Tab 만들기와 리액트에서의 애니메이션 (cf. react-transition-group)
+- 
+- 
+- 
 
 
 
@@ -1328,6 +1500,7 @@ e.g.
     /* eslint-disable */
   ```
 
+<br />
 <br />
 
 >>> Latte is Horse - class를 이용한 옛날 옛적의 React 문법
@@ -1419,6 +1592,7 @@ e.g.
     ```
 
 <br />
+<br />
 
 >>> 리액트 사이트 build & Github Pages로 배포하는 방법
 - 우리가 만든 리액트 프로젝트를 배포하려면 그냥 작업하던 `App.js` 파일을 그대로 올리는 것이 아니라 **build용 파일을 생성한 후** 그 파일을 올려야한다.       
@@ -1461,6 +1635,8 @@ e.g.
     - https://velog.io/@hoon_dev/%EB%A6%AC%EC%95%A1%ED%8A%B8-%EC%8B%9C%EC%9E%91%ED%95%98%EA%B8%B0Route-Link-Switch-5
     - https://velog.io/@realryankim/TIL-Axios%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%B4%EC%84%9C-HTTP-%EC%9A%94%EC%B2%AD%ED%95%98%EA%B8%B0
     - https://hazel-developer.tistory.com/145
+    - https://ko-de-dev-green.tistory.com/67
+    - https://github.com/ekfka4863/TIL/blob/master/React/React%20Basic/React_Context%20API%20%EB%A5%BC%20%EC%82%AC%EC%9A%A9%ED%95%9C%20%EC%A0%84%EC%97%AD%20%EA%B0%92%20%EA%B4%80%EB%A6%AC.md
     - 
     - 
     - 

@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
 import axios from "axios";
 
@@ -10,6 +10,9 @@ import Data from"./data"
 import { Link, Route, Switch } from 'react-router-dom'; 
 import Detail from "./component/Detail";   // src 내에 컴포넌트 파일만 모아놓은 폴더를 만들기도 한다
 
+// useContext 사용하기 전 범위 생성 
+const stockContext = React.createContext();
+
 
 function App() {
   const [shoes, setShoes] = useState(Data);
@@ -17,13 +20,21 @@ function App() {
 
   // Component 
   function Card(props) {
+
+    // useContext 
+    const stocks = useContext(stockContext);
+
     return (
       <div className="col-md-4"> 
         <img src={'https://codingapple1.github.io/shop/shoes' + (props.index + 1) + '.jpg'} alt={'random shoes image' + (props.index + 1)} width="100%" />
         <h4>{ props.shoes.title }</h4>
         <p>{ props.shoes.content } & { props.shoes.price }</p>
+
+        {/* {stocks[0]} */}
+        {stocks[props.index]}
+
       </div>
-    );
+    )
   }
 
   return (
@@ -72,13 +83,16 @@ function App() {
           </div>
         </div>
         <div className="container">
-          <div className="row">
-            {
-              shoes.map((shoe, idx) => {
-                return <Card shoes={shoes[idx]} index={idx} key={idx} />    // cf. 반복문을 돌리면 key를 꼭 써라~~
-              })
-            }
-          </div>
+
+          <stockContext.Provider value={stocks}>
+            <div className="row">
+              {
+                shoes.map((shoe, idx) => {
+                  return <Card shoes={shoes[idx]} index={idx} key={idx} />    // cf. 반복문을 돌리면 key를 꼭 써라~~
+                })
+              }
+            </div>
+          </stockContext.Provider>
           <button className="btn btn-primary" onClick={() => {
 
             // 서버에 데이터를 보내고 싶을 떄 - POST 요청하는 방법
